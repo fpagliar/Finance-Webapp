@@ -12,7 +12,11 @@ class GenericRepository {
         this.executor.post("repository", {tableName: entity.getMetadata().tableName(), record: entity}, onSuccess);
     }
 
-    public retrieveAll = (entity: EntityMetadata<any>, onSuccess: (param: any) => void) => {
-        this.executor.get("repository?tableName=" + entity.tableName(), onSuccess);
+    public retrieveAll = <T extends Entity<T>> (entity: EntityMetadata<T>, onSuccess: (records: Array<T>) => void) => {
+        this.executor.get("repository?tableName=" + entity.tableName(), function (data) {
+            debugger;
+            entity.build(data);
+            
+        });
     }
 }
