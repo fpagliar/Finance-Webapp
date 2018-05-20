@@ -7,82 +7,32 @@
 /// <reference path="../../Page/Model/BankPage.ts" />
 
 class PageHandler {
+    public static bankPage: BankPage; 
 
-    public static getRepo = () : Promise<GenericRepository> => {
-        const deferred = $.Deferred();
+    public static load = () : void => {
         Authenticator.fetchUserToken().then(function (authToken: string) {
             const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
-            const repo = new GenericRepository(executor);
-            deferred.resolve(repo);
+            PageHandler.loadPages(new GenericRepository(executor));
         }, function (error) {
-            deferred.reject(error);
             MessageBoard.showMessage(error, MessageType.Error);
         });
-        return deferred;
+    }
+
+    private static loadPages = (repo: GenericRepository) : void => {
+        PageHandler.bankPage = new BankPage(repo);
     }
 }
 
-$("#mybutton").on('click', function () {
-    debugger;
-    Authenticator.fetchUserToken().then(function (authToken: string) {
-        const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
-        const repo = new GenericRepository(executor);
-        repo.save(new Account("accountId", "accountName", "bank"), function (param) {
-            debugger;
-        });
-        repo.save(new Transaction(), function (param) {
-            debugger;
-        });
-        repo.retrieveAll(Account.getMetadata(), function (param) {
-            debugger;
-            let a = 1;
-        });
-    });
+$(document).ready(function () {
+    PageHandler.load();
 });
 
-// $("#showBankFormButton").on('click', function() {
-//     $("newBankForm").show();
-// });
-
-$("#showAccountFormButton").on('click', function() {
-    Authenticator.fetchUserToken().then(function (authToken: string) {
-        const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
-        const repo = new GenericRepository(executor);
-        repo.retrieveAll(Bank.getMetadata(), function (banks: Array<Bank>) {
-
-        });
-    });
-});
-
-$("#createAccountButton").on('click', function() {
-    Authenticator.fetchUserToken().then(function (authToken: string) {
-        const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
-        const repo = new GenericRepository(executor);
-        const accountName = <string> $("accountName").val();
-        repo.save(new Account("accountId", accountName, "bank"), function (param) {
-            debugger;
-        });
-    });
-});
-
-$("#banksSection").on('click', function() {
-    PageHandler.getRepo().then(function (repo: GenericRepository) { 
-        repo.retrieveAll(Bank.getMetadata(), function (banks: Array<Bank>) {
-            const page = new BankPage();
-            page.show(banks);
-        });
-    });
+$("#banksSection").on('click', function () {
+    PageHandler.bankPage.show();
 });
 
 $("#createBankButton").on('click', function() {
-    PageHandler.getRepo().then(function (repo: GenericRepository) { 
-        const bankName = <string> $("#bankName").val();
-        repo.save(new Bank("bankId", bankName), function (param) {
-            $("#newBankForm").hide();
-            $(".modal-backdrop").remove();
-            MessageBoard.showMessage("Bank " + bankName + " was created successfully!", MessageType.Success);
-        });
-    });
+    PageHandler.bankPage.create();
 });
 
 $('#file').change(function() {

@@ -1,5 +1,4 @@
 
-interface Page {
-
+class Page {
     // show: () => void;
 }
