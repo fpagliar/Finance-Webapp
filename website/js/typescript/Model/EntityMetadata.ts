@@ -5,4 +5,6 @@ interface EntityMetadata<T extends Entity<T>> {
     tableName: () => string;
 
     build: (serialized: string) => T;
+
+    getColumnHeaders: () => Array<string>;
 }

@@ -14,9 +14,11 @@ class GenericRepository {
 
     public retrieveAll = <T extends Entity<T>> (entity: EntityMetadata<T>, onSuccess: (records: Array<T>) => void) => {
         this.executor.get("repository?tableName=" + entity.tableName(), function (data) {
-            debugger;
-            entity.build(data);
-            
+            const records : Array<T> = [];
+            for (let entry of data) {
+                records.push(entity.build(entry));
+            }
+            onSuccess(records);
         });
     }
 }

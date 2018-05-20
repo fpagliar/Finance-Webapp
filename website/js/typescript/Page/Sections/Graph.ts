@@ -1,14 +1,12 @@
+/// <reference path="../Serializer.ts" />
+/// <reference path="Section.ts" />
 
+class Graph extends Section {
 
-class Graph implements Section {
+    public static readonly INSTANCE = new Graph();
 
-    public collapse = () : void => {
-        // Hide Element
-    };
-
-    public rename = () : void => {
-        // $("#graphSection").find(".myTitle").hide();
-        // Change title
+    protected getSectionName = () : string => {
+        return "graphSection";
     }
 
     public populate = () : void => {

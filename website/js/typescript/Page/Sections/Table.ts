@@ -1,16 +1,19 @@
+/// <reference path="../Serializer.ts" />
+/// <reference path="Section.ts" />
 
+class Table extends Section {
 
-class Table implements Section {
+    public static readonly INSTANCE = new Table();
 
-    public collapse = () : void => {
-        // Hide Element
-    };
-
-    public rename = () : void => {
-        // Change title
+    protected getSectionName = () : string => {
+        return "tableSection";
     }
 
-    public populate = () : void => {
-
+    public populate = <T> (records: Array<Entity<T>>) : void => {
+        const head = $("thead")[0];
+        head.innerHTML = Serializer.toHeaders(records[0].getMetadata().getColumnHeaders());
+        const body = $("tbody")[0];
+        const rowData : Array<string> = records.map(x => Serializer.toRow(x.toColumnData()));
+        body.innerHTML = rowData.join("\n");
     };
 }

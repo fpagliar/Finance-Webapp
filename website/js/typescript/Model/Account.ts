@@ -8,9 +8,12 @@ class AccountMetadata implements EntityMetadata<Entity<Account>> {
         return AccountMetadata.tableName;
     }
 
-    public build = (serialized:string) : Account => {
-        const parsedObj = JSON.parse(serialized);
-        return new Account(parsedObj.accountId, parsedObj.accountName, parsedObj.bank);
+    public getColumnHeaders = () : Array<string> => {
+        return ["accountId", "accountName", "bank"];
+    }
+
+    public build = (serialized : any) : Account => {
+        return new Account(serialized.accountId, serialized.accountName, serialized.bank);
     }
 }
 
@@ -29,6 +32,10 @@ class Account implements Entity<Account> {
 
     public getMetadata = () : AccountMetadata => {
         return Account.metadata;
+    }
+
+    public toColumnData = () : Array<any> => {
+        return [this.accountId, this.accountName, this.bank];
     }
 
     public static getMetadata = () : AccountMetadata => {

@@ -3,6 +3,24 @@
 /// <reference path="../../Model/Account.ts" />
 /// <reference path="../../Model/Bank.ts" />
 /// <reference path="../../Model/Transaction.ts" />
+/// <reference path="../../Page/MessageBoard.ts" />
+/// <reference path="../../Page/Model/BankPage.ts" />
+
+class PageHandler {
+
+    public static getRepo = () : Promise<GenericRepository> => {
+        const deferred = $.Deferred();
+        Authenticator.fetchUserToken().then(function (authToken: string) {
+            const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
+            const repo = new GenericRepository(executor);
+            deferred.resolve(repo);
+        }, function (error) {
+            deferred.reject(error);
+            MessageBoard.showMessage(error, MessageType.Error);
+        });
+        return deferred;
+    }
+}
 
 $("#mybutton").on('click', function () {
     debugger;
@@ -17,6 +35,7 @@ $("#mybutton").on('click', function () {
         });
         repo.retrieveAll(Account.getMetadata(), function (param) {
             debugger;
+            let a = 1;
         });
     });
 });
@@ -46,13 +65,22 @@ $("#createAccountButton").on('click', function() {
     });
 });
 
+$("#banksSection").on('click', function() {
+    PageHandler.getRepo().then(function (repo: GenericRepository) { 
+        repo.retrieveAll(Bank.getMetadata(), function (banks: Array<Bank>) {
+            const page = new BankPage();
+            page.show(banks);
+        });
+    });
+});
+
 $("#createBankButton").on('click', function() {
-    Authenticator.fetchUserToken().then(function (authToken: string) {
-        const executor = new RequestExecutor(authToken, Configuration.Api.invokeUrl);
-        const repo = new GenericRepository(executor);
-        const bankName = <string> $("bankName").val();
+    PageHandler.getRepo().then(function (repo: GenericRepository) { 
+        const bankName = <string> $("#bankName").val();
         repo.save(new Bank("bankId", bankName), function (param) {
-            debugger;
+            $("#newBankForm").hide();
+            $(".modal-backdrop").remove();
+            MessageBoard.showMessage("Bank " + bankName + " was created successfully!", MessageType.Success);
         });
     });
 });

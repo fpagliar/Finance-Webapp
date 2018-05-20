@@ -7,8 +7,12 @@ class TransactionMetadata implements EntityMetadata<Entity<Transaction>> {
         return TransactionMetadata.tableName;
     }
 
-    public build = (serialized:string) : Transaction => {
+    public build = (serialized : any) : Transaction => {
         return new Transaction();
+    }
+
+    public getColumnHeaders = () : Array<string> => {
+        return ["transactionId", "accountId", "description", "category", "subCategory", "date", "tags"];
     }
 }
 class Transaction implements Entity<Transaction> {
@@ -28,6 +32,10 @@ class Transaction implements Entity<Transaction> {
 
     public getMetadata = () : TransactionMetadata => {
         return Transaction.metadata;
+    }
+
+    public toColumnData = () : Array<any> => {
+        return [this.transactionId, this.accountId, this.description, this.category, this.subCategory, this.date, this.tags];
     }
 
     public static getMetadata = () : TransactionMetadata => {

@@ -1,0 +1,5 @@
+
+interface Page {
+
+    // show: () => void;
+}
