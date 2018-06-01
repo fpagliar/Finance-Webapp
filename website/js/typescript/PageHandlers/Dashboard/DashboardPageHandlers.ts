@@ -24,6 +24,17 @@ class PageHandler {
 }
 
 $(document).ready(function () {
+    const forms = $(".formImport");
+    for (let i = 0; i < forms.length; i++) {
+        document.body.appendChild((<any>forms[i]).import.querySelector("body"));
+    }
+
+    const navigationItems = $(".navigationImport");
+    for (let i = 0; i < navigationItems.length; i++) {
+        $("#operationsNavigation")[0].appendChild((<any>navigationItems[i]).import.querySelector("body"));
+    }
+    $(".operationButton").hide();
+
     PageHandler.load();
 });
 
