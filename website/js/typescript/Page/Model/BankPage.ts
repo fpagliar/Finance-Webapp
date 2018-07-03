@@ -3,25 +3,42 @@
 /// <reference path="../Page.ts" />
 /// <reference path="../../GenericRepository.ts" />
 
-class BankPage extends Page {
-
-    private readonly repo: GenericRepository;
+class BankPage extends Page<Bank> {
 
     constructor(repo : GenericRepository) {
-        super();
-        this.repo = repo;
+        super(repo);
     }
 
-    public show = () : void => {
-        $(".operationButton").hide();
-        $(".operationButton.bank").show();
-        Graph.INSTANCE.collapse();
-        Table.INSTANCE.expand();
-        Table.INSTANCE.rename("Banks");
-        this.repo.retrieveAll(Bank.getMetadata(), function(banks: Array<Bank>) {
-            Table.INSTANCE.populate(banks);
-        });
+    protected getNavigationClass = () : string => {
+        return "bank";
     }
+
+    protected getTitle = () : string => {
+        return "Banks";
+    }
+
+    protected showsTable = () : boolean => {
+        return true;
+    }
+
+    protected showsGraph = () : boolean => {
+        return false;
+    }
+
+    protected getMetadata = () : EntityMetadata<Bank> => {
+        return Bank.getMetadata();
+    }
+
+    // public show = () : void => {
+    //     $(".operationButton").hide();
+    //     $(".operationButton.bank").show();
+    //     Graph.INSTANCE.collapse();
+    //     Table.INSTANCE.expand();
+    //     Table.INSTANCE.rename("Banks");
+    //     this.repo.retrieveAll(Bank.getMetadata(), function(banks: Array<Bank>) {
+    //         Table.INSTANCE.populate(banks);
+    //     });
+    // }
 
     public create = () : void => {
         const bankName = <string> $("#bankName").val();

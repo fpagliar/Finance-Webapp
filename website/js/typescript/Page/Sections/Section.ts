@@ -3,6 +3,14 @@
 
 abstract class Section {
 
+    public show = (isVisible: boolean) : void => {
+        if (isVisible) {
+            this.expand();
+        } else {
+            this.collapse();
+        }
+    }
+
     public collapse = () : void => {
         this.getSection().hide();
     };
