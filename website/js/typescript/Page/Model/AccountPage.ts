@@ -29,13 +29,9 @@ class AccountPage extends Page<Account> {
         return Account.getMetadata();
     }
 
-    // public create = () : void => {
-    //     const bankName = <string> $("#bankName").val();
-    //     const bankId = <string> $("#bankId").val();
-    //     this.repo.save(new Bank(bankId, bankName), function (param) {
-    //         $("#newBankForm").hide();
-    //         $(".modal-backdrop").remove();
-    //         MessageBoard.showMessage("Bank " + bankName + " was created successfully!", MessageType.Success);
-    //     });
-    // }
+    protected populateData = () : void => {
+        this.repo.retrieveAll(this.getMetadata(), function(accounts: Array<Account>) {
+            Table.INSTANCE.populate(accounts);
+        });
+    }
 }

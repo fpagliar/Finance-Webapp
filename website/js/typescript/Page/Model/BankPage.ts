@@ -29,16 +29,11 @@ class BankPage extends Page<Bank> {
         return Bank.getMetadata();
     }
 
-    // public show = () : void => {
-    //     $(".operationButton").hide();
-    //     $(".operationButton.bank").show();
-    //     Graph.INSTANCE.collapse();
-    //     Table.INSTANCE.expand();
-    //     Table.INSTANCE.rename("Banks");
-    //     this.repo.retrieveAll(Bank.getMetadata(), function(banks: Array<Bank>) {
-    //         Table.INSTANCE.populate(banks);
-    //     });
-    // }
+    protected populateData = () : void => {
+        this.repo.retrieveAll(this.getMetadata(), function(banks: Array<Bank>) {
+            Table.INSTANCE.populate(banks);
+        });
+    }
 
     public create = () : void => {
         const bankName = <string> $("#bankName").val();

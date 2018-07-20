@@ -4,10 +4,12 @@
 /// <reference path="../../Model/Bank.ts" />
 /// <reference path="../../Model/Transaction.ts" />
 /// <reference path="../../Page/MessageBoard.ts" />
+/// <reference path="../../Page/Model/AccountPage.ts" />
 /// <reference path="../../Page/Model/BankPage.ts" />
 
 class PageHandler {
     public static bankPage: BankPage; 
+    public static accountPage: AccountPage; 
 
     public static load = () : void => {
         Authenticator.fetchUserToken().then(function (authToken: string) {
@@ -20,22 +22,24 @@ class PageHandler {
 
     private static loadPages = (repo: GenericRepository) : void => {
         PageHandler.bankPage = new BankPage(repo);
+        PageHandler.accountPage = new AccountPage(repo);
+        PageHandler.bankPage.show();
     }
 }
 
 $(document).ready(function () {
-    const forms = $(".formImport");
-    for (let i = 0; i < forms.length; i++) {
-        document.body.appendChild((<any>forms[i]).import.querySelector("body"));
-    }
+        const forms = $(".formImport");
+        for (let i = 0; i < forms.length; i++) {
+            document.body.appendChild((<any>forms[i]).import.querySelector("body").firstElementChild);
+        }
 
-    const navigationItems = $(".navigationImport");
-    for (let i = 0; i < navigationItems.length; i++) {
-        $("#operationsNavigation")[0].appendChild((<any>navigationItems[i]).import.querySelector("body"));
-    }
-    $(".operationButton").hide();
+        const navigationItems = $(".navigationImport");
+        for (let i = 0; i < navigationItems.length; i++) {
+            $("#operationsNavigation")[0].appendChild((<any>navigationItems[i]).import.querySelector("body").firstChild);
+        }
+        $(".operationButton").hide();
 
-    PageHandler.load();
+        PageHandler.load();
 });
 
 $("#banksSection").on('click', function () {
@@ -45,6 +49,15 @@ $("#banksSection").on('click', function () {
 $("#createBankButton").on('click', function() {
     PageHandler.bankPage.create();
 });
+
+$("#accountsSection").on('click', function () {
+    PageHandler.accountPage.show();
+});
+
+$("#createAccountButton").on('click', function() {
+    // PageHandler.accountPage.create();
+});
+
 
 $('#file').change(function() {
     const file = (<any>this).files[0];

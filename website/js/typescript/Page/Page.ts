@@ -13,16 +13,23 @@ abstract class Page<T extends Entity<T>> {
     protected abstract showsTable: () => boolean;
     protected abstract showsGraph: () => boolean;
     protected abstract getMetadata: () => EntityMetadata<Entity<T>>;
+    protected abstract populateData: () => void;
 
-    public show = () : void => {
+    private showNavigation = () : void => {
         $(".operationButton").hide();
         $(".operationButton." + this.getNavigationClass()).show();
+    }
+
+    private showLayout = () : void => {
         Graph.INSTANCE.show(this.showsGraph());
         Graph.INSTANCE.rename(this.getTitle());
         Table.INSTANCE.show(this.showsTable());
         Table.INSTANCE.rename(this.getTitle());
-        this.repo.retrieveAll(this.getMetadata(), function(banks: Array<T>) {
-            Table.INSTANCE.populate(banks);
-        });
+    }
+
+    public show = () : void => {
+        this.showNavigation();
+        this.showLayout();
+        this.populateData();
     }
 }
