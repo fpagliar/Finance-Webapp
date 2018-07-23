@@ -1,0 +1,1 @@
+tsc --p website\typescript\tsconfig.json && tsc --p website\typescript\PageHandlers\Dashboard\tsconfig.json && tsc --p website\typescript\PageHandlers\SignInPage\tsconfig.json

@@ -1,0 +1,17 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "system",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "../js/target/core.js",
+        "sourceMap": false,
+    },
+    "include": [
+        "./**/*.ts"
+    ],
+    "exclude" : [
+        "./PageHandlers/**"        
+    ]
+}
