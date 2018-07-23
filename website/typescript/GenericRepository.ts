@@ -1,5 +1,6 @@
 /// <reference path="RequestExecutor.ts" />
-
+/// <reference path="Model/Entity.ts" />
+/// <reference path="Model/EntityMetadata.ts" />
 class GenericRepository {
 
     private executor: RequestExecutor;
